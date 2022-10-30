@@ -8,42 +8,45 @@
 import SwiftUI
 
 struct ContentView: View {
-    var emojis = ["💜", "💜", "💜", "💜", "💜", "💜", "💜",  "💜", "💜", "😑"]
-    var body: some View {
-      ScrollView {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]) {
-          ForEach(0..<emojis.count, id: \.self, content: { emoji in
-                CardView( content: emojis[emoji])
-                  .aspectRatio(1/2, contentMode: .fill)
-            }
-          )
-       }
+  let emojis = ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🫐", "🍈", "🍒", "🍑", "🥭", "🍍", "🥥", "🥝", "🍅", "🍆", "🥑", "🥦", "🥬", "🥒", "🌶️", "🫑", "🌽", "🥕", "🫒", "🧄", "🧅", "🥔", "🍠", "🥐", "🥯"]
+  let emojisCount = 3
+  var body: some View {
+    ScrollView {
+      LazyVGrid(columns: [GridItem(), GridItem(), GridItem()]) {
+        ForEach(emojis, id: \.self) {emoji in
+          CardView(content: emoji)
+            .aspectRatio(2/3, contentMode: .fit)
+        }
       }
-        .foregroundColor(Color.brown)
-        .padding(.horizontal)
     }
+ 
+    .foregroundColor(.yellow)
+    .font(.largeTitle)
+    
+    
+  }
 }
 
 struct CardView: View {
-  @State var isFaceUp = true
+  @State var isFaceUp: Bool = true
   var content: String
-  var shape = RoundedRectangle(cornerRadius: 20.0)
+  
   var body: some View {
-    ZStack{
-      
+    ZStack {
       if isFaceUp {
-        shape
-          .fill(.white)
-        shape
-          .strokeBorder(lineWidth: 3)
+        RoundedRectangle(cornerRadius: 25.0)
+          .strokeBorder(lineWidth: 3.0)
+         
         Text(content)
-       
-      } else {
-        shape
+      }
+      else {
+        RoundedRectangle(cornerRadius: 25.0)
           .fill()
       }
         
+      
     }
+    .padding()
     .onTapGesture {
       isFaceUp.toggle()
     }
