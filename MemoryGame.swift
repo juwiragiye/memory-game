@@ -10,6 +10,8 @@ import Foundation
 struct MemoryGame<CardContent> {
   private(set) var cards: Array<Card>
   
+
+  
   init(numOfPairs: Int, createCardContent: (Int) -> CardContent ) {
     cards = Array<Card>()
     
@@ -20,14 +22,25 @@ struct MemoryGame<CardContent> {
     }
   }
   
-  func choose(_ card: Card) {
-    
+  mutating func choose(_ card: Card) {
+    cards[index(of: card)].isFaceUp.toggle()
   }
   
-  struct Card {
+  func index(of card: Card) -> Int{
+    for cardIndex in 0..<cards.count {
+      if cards[cardIndex].id == card.id
+      {
+        return cardIndex
+      }
+    }
+    return 0
+  }
+  
+  struct Card: Identifiable {
     var isFaceUp: Bool
     var isMatched: Bool
     var cardContent: CardContent
+    let id: UUID = UUID()
   }
   
 }

@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
+  @ObservedObject var game: EmojiMemoryGame
   let emojis = ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🫐", "🍈", "🍒", "🍑", "🥭", "🍍", "🥥", "🥝", "🍅", "🍆", "🥑", "🥦", "🥬", "🥒", "🌶️", "🫑", "🌽", "🥕", "🫒", "🧄", "🧅", "🥔", "🍠", "🥐", "🥯"]
   let emojisCount = 3
   var body: some View {
     ScrollView {
       LazyVGrid(columns: [GridItem(), GridItem(), GridItem()]) {
-        ForEach(emojis, id: \.self) {emoji in
-          CardView(content: emoji)
+        ForEach(game.cards) {card in
+          CardView(card: card)
             .aspectRatio(2/3, contentMode: .fit)
+            .onTapGesture {
+              game.choose(card)            
         }
       }
     }
@@ -28,34 +31,31 @@ struct ContentView: View {
 }
 
 struct CardView: View {
-  @State var isFaceUp: Bool = true
-  var content: String
+  var card: MemoryGame<String>.Card
   
   var body: some View {
+    let shape = RoundedRectangle(cornerRadius: 25.0)
     ZStack {
-      if isFaceUp {
-        RoundedRectangle(cornerRadius: 25.0)
-          .strokeBorder(lineWidth: 3.0)
+      if card.isFaceUp {
+       
+        shape.strokeBorder(lineWidth: 3.0)
          
-        Text(content)
+        Text(card.cardContent)
       }
       else {
-        RoundedRectangle(cornerRadius: 25.0)
-          .fill()
+        shape.fill()
       }
         
       
     }
     .padding()
-    .onTapGesture {
-      isFaceUp.toggle()
-    }
+    
   }
 }
 
-struct ContentView_Previews: PreviewProvider {
+  struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-      ContentView()
-        .previewDevice("iPhone 13 mini")
+      ContentView(game: EmojiMemoryGame())
     }
+  }
 }
